@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 import * as process from 'process';
 import { join } from 'path';
+import { UserEntity } from '../user/user.entity';
 
 config({ path: join(process.cwd(), '.env') });
 const configService = new ConfigService();
@@ -16,8 +17,9 @@ const options = (): DataSourceOptions => {
     database: process.env.POSTGRES_DATABASE,
     type: 'postgres',
     logging: configService.get('IS_PROD') === 'false',
-    entities: [join(__dirname, '**', '*.entity{.ts,.js}')],
-    migrations: ['dist/migrations/*.{ts,js}'],
+    entities: [UserEntity],
+    // migrations: ['dist/src/migrations/*.{ts,js}'],
+    synchronize: true,
   };
 };
 export const appDataSource = new DataSource(options());
