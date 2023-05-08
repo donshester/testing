@@ -8,6 +8,6 @@ import { FileService } from './user/file.service';
 @Module({
   imports: [UserModule, TypeormModule],
   controllers: [AppController],
-  providers: [AppService, FileService],
+  providers: [AppService],
 })
 export class AppModule {}
