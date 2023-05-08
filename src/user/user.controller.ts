@@ -58,8 +58,13 @@ export class UserController {
     @Param('email') email: string,
     @UploadedFile() imageFile: Express.Multer.File,
   ) {
-    const url: string = await this.fileService.uploadImage(imageFile);
-    await this.userService.updateUserByEmail(email, { image: url });
+    const basedImage: string = await this.fileService.uploadImage(imageFile);
+    await this.userService.updateUserByEmail(email, { image: basedImage });
+  }
+  @Post('/:email/pdf')
+  async generatePdf(@Body('email') email: string) {
+    const result = await this.fileService.generatePdf(email);
+    return { success: result };
   }
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
