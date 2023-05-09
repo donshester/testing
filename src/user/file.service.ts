@@ -6,7 +6,9 @@ import { Repository } from 'typeorm';
 import { UserService } from './user.service';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as fs from 'fs';
-
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import * as path from "path";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 @Injectable()
 export class FileService {
   constructor(
@@ -24,7 +26,6 @@ export class FileService {
     return `data:${mimeType};base64,${base64String}`;
   }
   getImageFormat(base64String: string): string {
-    console.log(base64String.slice(0,10))
     if (base64String.slice(0, 8) === '/9j/4AAQ') {
       return 'jpg';
     } else if (base64String.slice(0, 10) === '/9j/4AAQSk') {
@@ -39,10 +40,26 @@ export class FileService {
   async generatePdf(email: string): Promise<boolean> {
     try {
       const user = await this.userService.getUserByEmail(email);
-      const dataUrl = this.createDataURLFromBase64(
-        user.image,
-        this.getImageFormat(user.image),
-      );
+      let dataUrl;
+      console.log(user);
+      if (user.image) {
+        dataUrl = this.createDataURLFromBase64(
+          user.image,
+          this.getImageFormat(user.image),
+        );
+      } else {
+        const defaultImagePath = path.join(
+          __dirname,
+          '../../defaults/user-default.png',
+        );
+        const defaultImage = await fs.promises.readFile(defaultImagePath);
+
+        dataUrl = this.createDataURLFromBase64(
+          defaultImage.toString('base64'),
+          'png',
+        );
+
+      }
       const docDefinition = {
         content: [
           {
@@ -71,6 +88,4 @@ export class FileService {
       return false;
     }
   }
-
-  // async savePdfToUser(user: UserEntity, pdfFile: Buffer): Promise<UserEntity>{}
 }

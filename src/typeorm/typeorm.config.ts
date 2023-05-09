@@ -18,7 +18,6 @@ const options = (): DataSourceOptions => {
     type: 'postgres',
     logging: configService.get('IS_PROD') === 'false',
     entities: [UserEntity],
-    // migrations: ['dist/src/migrations/*.{ts,js}'],
     synchronize: true,
   };
 };

@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 @Entity('users')
 export class UserEntity {
@@ -10,6 +11,10 @@ export class UserEntity {
 
   @Column()
   lastName: string;
+
+  @Column()
+  @Exclude()
+  hashedPassword: string;
 
   @Column({ nullable: true })
   image: string;

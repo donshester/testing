@@ -1,15 +1,22 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNotEmpty, Length, Matches } from 'class-validator';
 
 export class CreateUserDto {
   @IsEmail()
   @IsNotEmpty()
-  email: string;
+  readonly email: string;
 
   @IsNotEmpty()
-  firstName: string;
+  readonly firstName: string;
 
   @IsNotEmpty()
-  lastName: string;
+  readonly lastName: string;
 
-  image: string;
+  @Length(8)
+  @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, {
+    message:
+      'Password must be at least 8 characters long and contain at least one letter and one number',
+  })
+  readonly password: string;
+
+  readonly image: string;
 }
