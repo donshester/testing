@@ -10,9 +10,9 @@ export class AuthMiddleware implements NestMiddleware {
   async use(req: ExpressRequestWithUser, res: Response, next: NextFunction) {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-      return res
-        .status(401)
-        .json({ message: 'Authorization header not found' });
+      req.user = null;
+      next();
+      return;
     }
 
     const token = authHeader.split(' ')[1];

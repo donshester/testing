@@ -4,7 +4,6 @@ import {
   Post,
   Body,
   Put,
-  Param,
   Delete,
   UseInterceptors,
   UploadedFile,
@@ -22,7 +21,6 @@ import { UserGuard } from './guards/user.guard';
 import { UserResponseInterface } from './interface/user-response.interface';
 import { User } from './decorators/user.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UserEntity } from './user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 
